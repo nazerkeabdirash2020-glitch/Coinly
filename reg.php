@@ -11,12 +11,9 @@ if ($pass !== $repeatpass) {
     die("Пароли не совпадают");
 }
 
-// ХЭШИРУЕМ пароль
-//$passHash = password_hash($pass, PASSWORD_DEFAULT);
 
 $sql = "INSERT INTO `users` (login, pass, email) VALUES ('$login', '$pass', '$email')";
-//$conn->query($sql);
-//echo $conn;
+
 
 if ($conn->query($sql) === TRUE) {
     echo "Успешная регистрация";

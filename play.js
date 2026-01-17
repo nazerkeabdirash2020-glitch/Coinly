@@ -1,7 +1,7 @@
 let storyText = document.getElementById("storyText");
 let playBtn = document.getElementById("playBtn");
 let nextBtn = document.getElementById("nextBtn");
-let choice1 = null; // "A" или "B"
+let choice1 = null; 
 let choice2 = null; 
 let story = [];
 let currentExtraStory = null;
@@ -49,31 +49,29 @@ function showStatNotification(text) {
     notif.textContent = text;
     notif.style.display = 'block';
 
-    // Заменяем переносы `\n` на HTML <br>
     notif.innerHTML = text.replace(/\n/g, "<br>");
 
 
     setTimeout(() => {
         notif.style.display = 'none';
-    }, 5000); // уведомление исчезает через 5 секунды
+    }, 5000); 
 }
 
 nextBtn.addEventListener("click", () => {
     if (isTyping) return;
 
-    // если мы в дополнительной ветке после выбора
     if (currentExtraStory) {
-        currentExtraStory.index++;  // используем index из объекта
+        currentExtraStory.index++;  
 
         if (currentExtraStory.index < currentExtraStory.array.length) {
             typeText(currentExtraStory.array[currentExtraStory.index]);
         } else {
-            // ветка закончилась
+        
             const callback = currentExtraStory.callback;
             currentExtraStory = null;
             
             if (callback) {
-                callback(); // выполняем callback
+                callback(); 
             } else {
                 nextBtn.style.display = "none";
             }
@@ -81,7 +79,7 @@ nextBtn.addEventListener("click", () => {
         return;
     }
     
-    // остальной код...
+
 });
 /*
     if (index === storyAfterChoiceA.length + 9 && choice1 === "A") {
@@ -101,7 +99,6 @@ nextBtn.addEventListener("click", () => {
     }
 
 
-    // обычная история
     index++;
     if (index < story.length) {
         typeText(story[index]);
@@ -144,7 +141,6 @@ function showChoice2() {
         container.style.gap = "15px";
         container.style.marginTop = "15px";
 
-        // 🔵 Вариант A
         const btnA = document.createElement("button");
         btnA.textContent = "Вложиться в бизнес";
         btnA.onclick = () => {
@@ -184,7 +180,6 @@ function showChoice2() {
             }, 800);
         };
 
-        // 🔵 Вариант B
         const btnB = document.createElement("button");
         btnB.textContent = "Отказаться";
         btnB.onclick = () => {
@@ -224,15 +219,13 @@ function showChoice1() {
 (Ваши выборы могут иметь как плюсы, так и последствия. Они повлияют на будущее — выбирайте с умом.)
 `;
 
-    // печатаем текст выбора
 typeText(choiceText, () => {
-    // создаём контейнер для кнопок
+
     const container = document.createElement("div");
     container.style.display = "flex";
     container.style.gap = "15px";
     container.style.marginTop = "15px";
 
-    // кнопка A
     const btnA = document.createElement("button");
     btnA.textContent = "Взять вторую работу";
     btnA.onclick = () => {
@@ -241,21 +234,17 @@ typeText(choiceText, () => {
         stress += 20;
         updateStats();
 
-        // Первое уведомление сразу
         showStatNotification(`💰+300 $\n😰+20% Стресс`);
 
-        container.remove(); // убираем кнопки
+        container.remove();
 
-        // Показываем историю с callback
         startExtraStory(storyAfterChoiceA, () => {
         showChoice2();
     });
     };
 
-    // ← ЗАКРЫТЬ фигурную скобку btnA.onclick
 
 
-        // кнопка B
         const btnB = document.createElement("button");
         btnB.textContent = "Оставить одну работу";
         btnB.onclick = () => {
@@ -265,7 +254,7 @@ typeText(choiceText, () => {
             knowledge += 5;
             updateStats();
                 showStatNotification(`💰+150 $\n😰+5% Стресс\n📘+5 финансовой грамотности`);
-            container.remove(); // убираем кнопки
+            container.remove();
 
         startExtraStory(storyAfterChoiceB, () => {
         showChoice2();
@@ -281,14 +270,14 @@ typeText(choiceText, () => {
 
 function startExtraStory(arr, onFinish) {
     currentExtraStory = {
-        array: arr,           // сохраняем массив
-        callback: onFinish,   // сохраняем callback
-        index: 0              // индекс внутри массива
+        array: arr,         
+        callback: onFinish,   
+        index: 0             
     };
     
-    extraIndex = 0;  // это можно убрать, используем currentExtraStory.index
+    extraIndex = 0;  
     nextBtn.style.display = "none";
-    typeText(currentExtraStory.array[extraIndex]);  // или currentExtraStory.array[currentExtraStory.index]
+    typeText(currentExtraStory.array[extraIndex]); 
 }
 
 function typeNextArray(arr, callback) {
@@ -383,30 +372,20 @@ const storyAfterChoiceA = [
 
 
 
-// объект для эффектов истории (чтобы передавать последствия в будущие выборы)
-/*
-let storyEffects = {
-    choice3Efficiency: 1, // по умолчанию эффективность 100%
-    highStressError: false
-};
-*/
-
-let playerGender = ""; // "male" или "female"
-let pronouns = {};     // местоимения игрока
+let playerGender = "";
+let pronouns = {};     
 
 const genderSelection = document.getElementById("genderSelection");
 const maleBtn = document.getElementById("maleBtn");
 const femaleBtn = document.getElementById("femaleBtn");
 let scene = document.getElementById("scene");
 
-// обработчики кнопок
 maleBtn.addEventListener("click", () => setGender("male"));
 femaleBtn.addEventListener("click", () => setGender("female"));
 
 function setGender(gender) {
     playerGender = gender;
 
-    // задаём местоимения
     if (gender === "male") {
         pronouns = {
             subject: "он",
@@ -447,7 +426,7 @@ function setGender(gender) {
         scene.style.backgroundImage = "url('room.jpeg')";
     }
 
-    // скрываем выбор пола и показываем кнопку "Играть"
+
     genderSelection.style.display = "none";
     playBtn.style.display = "inline-block";
 
@@ -463,7 +442,6 @@ let index = 0;
 let charIndex = 0;
 let isTyping = false;
 
-// функция печати текста
 function typeText(text, callback) {
     isTyping = true;
     storyText.innerHTML = "";
@@ -481,13 +459,13 @@ function typeText(text, callback) {
         } else {
             clearInterval(interval);
             isTyping = false;
-            if (!callback) nextBtn.style.display = "inline-block"; // показываем далее
+            if (!callback) nextBtn.style.display = "inline-block"; 
             if (callback) callback();
         }
     }, 10);
 }
 
-// кнопка "Играть"
+
 playBtn.addEventListener("click", () => {
     playBtn.style.display = "none";
     typeText(story[index]);
@@ -495,10 +473,10 @@ playBtn.addEventListener("click", () => {
 
 
 
-let money = 500;          // капитал
-let stress = 0;           // стресс (0–100)
-let knowledge = 0;        // фин. грамотность (0–100)
-let loans = 0;            // количество кредитов
+let money = 500;         
+let stress = 0;          
+let knowledge = 0;        
+let loans = 0;            
 let reputation = 0;
 
 function updateStats() {
@@ -550,8 +528,7 @@ function loadProgress() {
 }
 
 window.addEventListener("beforeunload", function (e) {
-    // стандартный текст для alert нельзя менять в современных браузерах
-    // браузер покажет стандартное сообщение
-    e.preventDefault(); // важно для некоторых браузеров
-    e.returnValue = ""; // обязательно задаём, чтобы сработало предупреждение
+
+    e.preventDefault(); 
+    e.returnValue = "";
 });

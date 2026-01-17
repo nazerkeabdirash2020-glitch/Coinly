@@ -16,11 +16,11 @@ color: white;
 }
 
 h1, h2, h3, h4, h5, h6, p, li, span {
-    color: white; /* Все текстовые элементы белые */
+    color: white; 
 }
 
 input, button {
-    color: #333; /* Поля ввода и кнопки сохраняют темный текст */
+    color: #333; 
 }
 
 

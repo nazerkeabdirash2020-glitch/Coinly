@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['pass
     $login = $_POST['login'];
     $pass  = $_POST['pass'];
 
-    // Подготовленный запрос
     $stmt = $conn->prepare("SELECT * FROM users WHERE login=? AND pass=?");
     $stmt->bind_param("ss", $login, $pass);
     $stmt->execute();
@@ -15,11 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'], $_POST['pass
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
 
-        // сохраняем данные в сессию
         $_SESSION['user_id'] = $row['user_id'];
         $_SESSION['login']   = $row['login'];
 
-        // редирект на аккаунт
         header("Location: log.php");
         exit;
     } else {
