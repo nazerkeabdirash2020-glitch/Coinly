@@ -134,8 +134,8 @@ function showChoice2() {
     nextBtn.style.display = "none";
 
     const choiceText = `
-Рискнуть вместе с друзьями —
-или остаться в стороне?
+Ваши друзья предлагают рискнуть и открыть бизнес вместе.
+Это шанс — но и ответственность.
 `;
 
     typeText(choiceText, () => {
@@ -144,22 +144,23 @@ function showChoice2() {
         container.style.gap = "15px";
         container.style.marginTop = "15px";
 
+        // 🔵 Вариант A
         const btnA = document.createElement("button");
         btnA.textContent = "Вложиться в бизнес";
         btnA.onclick = () => {
             container.remove();
             choice2 = "A";
 
-            // базовые последствия
             money -= 200;
             reputation += 10;
             knowledge += 5;
             updateStats();
 
-            showStatNotification(`💰 -200 $\n⭐ +10 Репутация\n📘 +5 Финансовая грамотность`);
+            showStatNotification(
+                `💰 -200 $\n⭐ +10 Репутация\n📘 +5 Финансовая грамотность`
+            );
 
-            // 🎲 РАНДОМ - БЕЗ setTimeout со строкой
-            const handleBusinessResult = () => {
+            setTimeout(() => {
                 const success = Math.random() < 0.5;
 
                 if (success) {
@@ -168,26 +169,22 @@ function showChoice2() {
                     showStatNotification(`🎉 Бизнес выстрелил!\n💰 +300 $`);
                 } else {
                     money -= 200;
+                    let text = `💸 Бизнес провалился\n💰 -200 $`;
 
-                    let extraText = `💸 Бизнес провалился\n💰 -200 $`;
-
-                    // ⚠️ проверка стресса
                     if (stress >= 20) {
                         reputation -= 10;
-                        extraText += `\n⭐ -10 Репутация (стресс сыграл против вас)`;
+                        text += `\n⭐ -10 Репутация (стресс сыграл против вас)`;
                     }
 
                     updateStats();
-                    showStatNotification(extraText);
+                    showStatNotification(text);
                 }
 
                 nextBtn.style.display = "inline-block";
-            };
-
-            // Используем setTimeout с функцией, а не строкой
-            setTimeout(handleBusinessResult, 800);
+            }, 800);
         };
 
+        // 🔵 Вариант B
         const btnB = document.createElement("button");
         btnB.textContent = "Отказаться";
         btnB.onclick = () => {
@@ -199,8 +196,8 @@ function showChoice2() {
             if (stress < 0) stress = 0;
 
             updateStats();
-
             showStatNotification(`⭐ -5 Репутация\n😌 -5% Стресс`);
+
             nextBtn.style.display = "inline-block";
         };
 
@@ -209,6 +206,7 @@ function showChoice2() {
         storyText.appendChild(container);
     });
 }
+
 /*
 function continueAfterChoice() {
    startExtraStory(storyBeforeChoice2, () => {
