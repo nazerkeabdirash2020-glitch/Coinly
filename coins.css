@@ -1,0 +1,131 @@
+* {
+margin: 0;
+padding: 0;
+}
+body {
+font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: linear-gradient(135deg, #141e30, #243b55);
+}
+
+a{
+text-decoration: none;
+color: white;
+}
+img{
+max-width: 100%;
+}
+.wrapper{
+
+width: 100%;
+}
+
+.container{
+	width: 1400px;
+	margin: 0 auto;
+}
+header{
+	padding: 25px 0;
+}
+header .logo{
+	font-size: 20px;
+    width: 200px;
+	font-weight: 800;
+	padding-left: 5px;
+}
+
+header nav{
+	float: right;
+	width: 45%;
+}
+
+header nav ul{
+	list-style: none;
+	display: flex;
+	justify-content: space-between;
+    text-align: left;
+	font-size: 20px;
+}
+
+header nav ul li a{
+	color: white;
+}
+
+header nav ul li{
+	width:100px;
+}
+
+header nav ul li.active::after{
+	content: '';
+	display: block;
+	width: 80px;
+	height: 5px;
+	background: #002150;
+	border-radius: 10px;
+	position: relative;
+	top: 4px;
+}
+
+header nav ul li:not(.active):not(.button) a:hover{
+	border-bottom: 5px solid #006498;
+	
+}
+
+header nav ul li.button a {
+	background: #006498;
+	color: #fff;
+	padding: 9px 17px;
+	border-radius: 5px;
+	transition: all 500ms ease;
+	}
+	
+	
+header nav ul li.button a:hover {
+	background: #009098;
+	}
+
+.iml {
+    width:200px;
+}
+
+.hero--info h1{
+	font-size: 35px;
+	font-weight: 600;
+	padding-bottom: 10px;
+	color: white;
+}
+
+.hero--info p{
+	font-size: 20px;
+	font-weight: 400;
+	color: white;
+}
+
+.hero--info {
+    margin: 0 auto;
+    padding: 50px 30px 25px;
+	width: 800px;
+    text-align: center;
+}
+
+.hero--info button {
+	font-size: 17px;
+	font-weight: 400;
+}
+
+.hero--info button a{
+    background: #006498;
+	color: #fff;
+	padding: 9px 17px;
+	border-radius: 5px;
+	transition: all 500ms ease;
+}
+
+.hero--info button a:hover {
+    background: #009098;
+}
+
+.hero--info button {
+	border : none; 
+}

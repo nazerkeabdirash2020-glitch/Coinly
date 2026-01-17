@@ -1,0 +1,224 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scene::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}  
+
+.scene {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.ui {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.sidebar-menu {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #50C878;
+    color: white;
+    z-index: 20;
+    width: 180px;
+    font-family: Arial, sans-serif;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #50C878;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.menu-links a {
+    display: block;
+    margin-top: 5px;
+    color: #50C878;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.menu-links a:hover {
+    color: #00A300;
+}
+
+.game-container {
+    width: 600px;
+}
+
+.story-box {
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid #50C878;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 150px;
+    margin-bottom: 20px;
+}
+
+.story-box p {
+    white-space: pre-line; /* учитывает переносы строк */
+}
+
+.buttons {
+    text-align: right;
+}
+
+button {
+    background: #50C878;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00A300;
+}
+
+.stats {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid #50C878;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.stat {
+    white-space: nowrap;
+}
+
+.gender-selection {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: white;
+    font-size: 18px;
+    z-index: 20; /* выше всего */
+}
+
+.gender-selection button {
+    background: #50C878;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.gender-selection button:hover {
+    background: #00A300;
+}
+
+.progress-ui {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 220px;
+    color: #fff;
+}
+
+.bar {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.bar-bg {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00ffcc, #00bfa6);
+    transition: width 0.3s;
+}
+
+.bar-fill.stress {
+    background: linear-gradient(90deg, #ff4e50, #f9d423);
+}
+
+.stat-notification {
+    position: absolute; /* всплывающее уведомление */
+    top: 100%;          /* чуть ниже панели */
+    left: 50%;
+    transform: translateX(-50%);
+    background:  rgba(0,0,0,0.2);
+    padding: 6px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-size: 14px;
+    display: none; /* скрыто по умолчанию */
+    z-index: 10;
+    width: 300px;             /* увеличиваем ширину */
+    max-width: 80%;           /* адаптивно для мобильных */
+}
+
+.stat-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#genderSelection::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
