@@ -2,6 +2,7 @@ let storyText = document.getElementById("storyText");
 let playBtn = document.getElementById("playBtn");
 let nextBtn = document.getElementById("nextBtn");
 let choice1 = null; // "A" или "B"
+let choice2 = null; 
 let story = [];
 let currentExtraStory = null;
 let extraIndex = 0;
@@ -13,7 +14,7 @@ function createStory() {
 
 `Основные параметры игры:
 \nЗначение
-\n💰 Капитал 500 $ 
+\n💰 Капитал 500 $ ффф
 \n😰 Стресс 0 %
 \n⭐ Репутация 0 (нейтральная)
 \n📘 Финансовая грамотность 0 / 100
@@ -62,23 +63,26 @@ nextBtn.addEventListener("click", () => {
 
     // если мы в дополнительной ветке после выбора
     if (currentExtraStory) {
-        extraIndex++;
+        currentExtraStory.index++;  // используем index из объекта
 
-        if (extraIndex < currentExtraStory.length) {
-            typeText(currentExtraStory[extraIndex]);
+        if (currentExtraStory.index < currentExtraStory.array.length) {
+            typeText(currentExtraStory.array[currentExtraStory.index]);
         } else {
             // ветка закончилась
+            const callback = currentExtraStory.callback;
             currentExtraStory = null;
-            nextBtn.style.display = "none";
+            
+            if (callback) {
+                callback(); // выполняем callback
+            } else {
+                nextBtn.style.display = "none";
+            }
         }
         return;
     }
-
-    // если дошли до выбора
-    if (index === 8 && choice1 === null) {
-        showChoice1();
-        return;
-    }
+    
+    // остальной код...
+});
 /*
     if (index === storyAfterChoiceA.length + 9 && choice1 === "A") {
         typeNextArray(storyBeforeChoice2, () => {
@@ -95,7 +99,7 @@ nextBtn.addEventListener("click", () => {
         index++;
         return;
     }
-*/
+
 
     // обычная история
     index++;
@@ -106,6 +110,112 @@ nextBtn.addEventListener("click", () => {
     }
 });
 
+
+const storyBeforeChoice2 = [
+`В один из вечеров вы встречаетесь с друзьями.
+Разговор начинается легко — работа, усталость, цены.`,
+
+`Потом тема незаметно смещается к деньгам.`,
+
+`Один из друзей вдруг говорит:
+— Я тут подумал… а что если нам открыть небольшой бизнес вместе?
+Ничего грандиозного. Просто попробовать.`,
+
+`Остальные поддерживают идею и переглядываются.
+Потом все смотрят на вас.`,
+
+`Вы понимаете:
+дело не только в деньгах.
+Это про доверие и общий риск.`
+];
+
+*/
+function showChoice2() {
+    nextBtn.style.display = "none";
+
+    const choiceText = `
+Рискнуть вместе с друзьями —
+или остаться в стороне?
+`;
+
+    typeText(choiceText, () => {
+        const container = document.createElement("div");
+        container.style.display = "flex";
+        container.style.gap = "15px";
+        container.style.marginTop = "15px";
+
+        const btnA = document.createElement("button");
+        btnA.textContent = "Вложиться в бизнес";
+        btnA.onclick = () => {
+            container.remove();
+            choice2 = "A";
+
+            // базовые последствия
+            money -= 200;
+            reputation += 10;
+            knowledge += 5;
+            updateStats();
+
+            showStatNotification(`💰 -200 $\n⭐ +10 Репутация\n📘 +5 Финансовая грамотность`);
+
+            // 🎲 РАНДОМ - БЕЗ setTimeout со строкой
+            const handleBusinessResult = () => {
+                const success = Math.random() < 0.5;
+
+                if (success) {
+                    money += 300;
+                    updateStats();
+                    showStatNotification(`🎉 Бизнес выстрелил!\n💰 +300 $`);
+                } else {
+                    money -= 200;
+
+                    let extraText = `💸 Бизнес провалился\n💰 -200 $`;
+
+                    // ⚠️ проверка стресса
+                    if (stress >= 20) {
+                        reputation -= 10;
+                        extraText += `\n⭐ -10 Репутация (стресс сыграл против вас)`;
+                    }
+
+                    updateStats();
+                    showStatNotification(extraText);
+                }
+
+                nextBtn.style.display = "inline-block";
+            };
+
+            // Используем setTimeout с функцией, а не строкой
+            setTimeout(handleBusinessResult, 800);
+        };
+
+        const btnB = document.createElement("button");
+        btnB.textContent = "Отказаться";
+        btnB.onclick = () => {
+            container.remove();
+            choice2 = "B";
+
+            reputation -= 5;
+            stress -= 5;
+            if (stress < 0) stress = 0;
+
+            updateStats();
+
+            showStatNotification(`⭐ -5 Репутация\n😌 -5% Стресс`);
+            nextBtn.style.display = "inline-block";
+        };
+
+        container.appendChild(btnA);
+        container.appendChild(btnB);
+        storyText.appendChild(container);
+    });
+}
+/*
+function continueAfterChoice() {
+   startExtraStory(storyBeforeChoice2, () => {
+   showChoice2();
+    });
+}
+*/
 
 function showChoice1() {
     nextBtn.style.display = "none";
@@ -140,7 +250,7 @@ typeText(choiceText, () => {
 
         // Показываем историю с callback
         startExtraStory(storyAfterChoiceA, () => {
-        continueAfterChoice();
+        showChoice2();
     });
     };
 
@@ -160,7 +270,7 @@ typeText(choiceText, () => {
             container.remove(); // убираем кнопки
 
         startExtraStory(storyAfterChoiceB, () => {
-        continueAfterChoice();
+        showChoice2();
     });
 
     };
@@ -172,18 +282,15 @@ typeText(choiceText, () => {
     )};
 
 function startExtraStory(arr, onFinish) {
-    currentExtraStory = arr;
-    extraIndex = 0;
-    currentExtraStory.callback = onFinish; // сохраняем callback
-
+    currentExtraStory = {
+        array: arr,           // сохраняем массив
+        callback: onFinish,   // сохраняем callback
+        index: 0              // индекс внутри массива
+    };
+    
+    extraIndex = 0;  // это можно убрать, используем currentExtraStory.index
     nextBtn.style.display = "none";
-    typeText(currentExtraStory[extraIndex]);
-}
-
-function continueAfterChoice() {
-    startExtraStory(storyBeforeChoice2, () => {
-        showChoice2();
-    });
+    typeText(currentExtraStory.array[extraIndex]);  // или currentExtraStory.array[currentExtraStory.index]
 }
 
 function typeNextArray(arr, callback) {
@@ -222,7 +329,21 @@ const storyAfterChoiceB = [
 `В один из вечеров, когда вы складывали подносы, подошёл ваш коллега. "Слушай, я вижу, что ты реально вникаешь в финансы. Даже без курсов, а просто изучая сам, уже многое понимаешь."`,
 `Вы улыбнулись. "Да, стараюсь разбираться. Пока не могу позволить себе курсы, но всё равно учусь и планирую будущее."`,
 `Вечера теперь проходят за книгами и заметками, а не за вторыми сменами. Деньги приходят медленнее, но вы получаете важные навыки и знания, которые будут полезны в будущем. Время, которое вы сэкономили на отдыхе и самообразовании, постепенно формирует прочную базу для ваших финансовых целей.`,
+`В один из вечеров вы встречаетесь с друзьями.
+Разговор начинается легко — работа, усталость, цены.`,
 
+`Потом тема незаметно смещается к деньгам.`,
+
+`Один из друзей вдруг говорит:
+— Я тут подумал… а что если нам открыть небольшой бизнес вместе?
+Ничего грандиозного. Просто попробовать.`,
+
+`Остальные поддерживают идею и переглядываются.
+Потом все смотрят на вас.`,
+
+`Вы понимаете:
+дело не только в деньгах.
+Это про доверие и общий риск.`
 ];
 
 const storyAfterChoiceA = [
@@ -245,10 +366,6 @@ const storyAfterChoiceA = [
 `В один из вечеров, когда вы складывали подносы, управляющий подходит и проверяет порядок. Его голос звучит спокойно. "Вы стараетесь. Ночные смены тяжёлые, но вы справляетесь. Продолжайте в том же духе — ваши усилия заметны."`,
 `Вы улыбнулись. "Спасибо, я стараюсь, чтобы всё получалось."`,
 `Несколько недель пролетели быстро. Усталость иногда ощущается, но финансовая подушка растёт, а вместе с ней — чувство уверенности. Вы понимаете, что ваши усилия дают результаты, и это мотивирует двигаться дальше.`,
-
-];
-
-const storyBeforeChoice2 = [
 `В один из вечеров вы встречаетесь с друзьями.
 Разговор начинается легко — работа, усталость, цены.`,
 
@@ -266,74 +383,7 @@ const storyBeforeChoice2 = [
 Это про доверие и общий риск.`
 ];
 
-function showChoice2() {
 
-    const btnA = document.createElement("button");
-btnA.textContent = "Вложиться в бизнес";
-btnA.onclick = () => {
-    container.remove();
-    choice2 = "A";
-
-    // базовые последствия
-    money -= 200;
-    reputation += 10;
-    knowledge += 5;
-    updateStats();
-
-    showStatNotification(`💰 -200 $\n⭐ +10 Репутация\n🧠 +5 Финансовая грамотность`);
-
-    // 🎲 РАНДОМ
-    setTimeout(() => {
-        const success = Math.random() < 0.5;
-
-        if (success) {
-            money += 300;
-            updateStats();
-
-            showStatNotification(`🎉 Бизнес выстрелил!\n💰 +300 $`);
-        } else {
-            money -= 200;
-
-            let extraText = `💸 Бизнес провалился\n💰 -200 $`;
-
-            // ⚠️ проверка стресса
-            if (stress >= 20) {
-                reputation -= 10;
-                extraText += `\n⭐ -10 Репутация (стресс сыграл против вас)`;
-            }
-
-            updateStats();
-            showStatNotification(extraText);
-        }
-
-        nextBtn.style.display = "inline-block";
-    }, 800); // небольшая пауза для драматичности
-};
-
-
-const btnB = document.createElement("button");
-btnB.textContent = "Отказаться";
-btnB.onclick = () => {
-    container.remove();
-    choice2 = "B";
-
-    reputation -= 5;
-    stress -= 5;
-    if (stress < 0) stress = 0;
-
-    updateStats();
-
-    showStatNotification(`⭐ -5 Репутация\n😌 -5% Стресс`);
-
-    nextBtn.style.display = "inline-block";
-
-    container.appendChild(btnA);
-    container.appendChild(btnB);
-    storyText.appendChild(container);
-};
-
-
-}
 
 // объект для эффектов истории (чтобы передавать последствия в будущие выборы)
 /*
