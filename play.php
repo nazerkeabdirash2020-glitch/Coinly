@@ -204,6 +204,6 @@ $reputation = (int)$stats['reputation'];
 
 <div id="statNotification" class="stat-notification"></div>
 
-<script src="play.js"></script>
+<script src="play.js?v=2"></script>
 </body>
 </html>
